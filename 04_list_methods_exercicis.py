@@ -25,6 +25,7 @@ llista_b = [4, 5, 6, 1, 2]
 # Buida completament llista_b fent servir clear().
 
 llista_a.extend(llista_b)
+llista_a.remove(1)
 deleted = llista_a.pop(3)
 print(deleted)
 llista_b.clear()
@@ -32,7 +33,7 @@ print(llista_a)
 print(llista_b)
 
 # Exercici 3: Slicing i eliminació amb del
-# Crea una llista amb els nombres de l'1 al 10.
+# Crea una llista amb els nombres de l'1 al 10. 
 # Fes servir slicing i del per eliminar els elements des de l'índex 2 fins al 5
 # (sense incloure el 5).
 # Imprimeix la llista resultant.
@@ -40,6 +41,7 @@ print(llista_b)
 llista = [1,2,3,4,5,6,7,8,9,10]
 del llista[2:5]
 print(llista)
+
 
 # Exercici 4: Ordenar i comptar
 # Crea una llista amb els nombres següents: [5, 2, 8, 1, 9, 4, 2].
