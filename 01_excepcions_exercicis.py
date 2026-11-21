@@ -2,7 +2,9 @@
 # EXERCICIS (excepcions)
 # Tots els textos d'entrada es proporcionen per evitar entrada interactiva.
 ###
-
+import math
+from pathlib import Path
+from tempfile import TemporaryDirectory
 # Exercici 1 - Bàsic. Conversió segura de tensions
 # Per a cada text de tensions, intenta convertir-lo amb float.
 # Captura ValueError i mostra 'Tensió incorrecta' en aquest cas.
@@ -11,6 +13,14 @@
 # Cas límit: '0' és una mesura vàlida.
 tensions = ["3.3", "avaria", "0"]
 # TODO: escriu el bucle i el tractament de ValueError.
+
+for text in tensions:
+    try:
+        temperatura = float(text)
+    except ValueError:
+        print("Tensio incorrecta")
+    else:
+        print(temperatura)
 
 # Exercici 2 - Bàsic. Humitat amb contracte
 # Defineix validar_humitat(text) que retorni un float finit dins [0, 100].
@@ -21,6 +31,17 @@ tensions = ["3.3", "avaria", "0"]
 # La resta han de produir ValueError, gestionat en les demostracions.
 entrades_humitat = ["0", "100", "45.5", "-1", "101", "nan", "inf", "error"]
 # TODO: defineix la funció i mostra resultats o un missatge de rebuig.
+
+def validar_humitat(text):
+
+    humitat = float(text)
+    if (humitat>100 or humitat<0):
+        raise ValueError("La humitat ha d'estar dins del rang")
+    if not math.isfinite(humitat):
+        raise ValueError("Ha de ser un numero finit")
+    return humitat
+print(validar_humitat(45.5))
+
 
 # Exercici 3 - Intermedi. Fitxer absent i finalització
 # Dins de TemporaryDirectory crea només una ruta a 'absent.txt' amb Path.
@@ -33,6 +54,30 @@ entrades_humitat = ["0", "100", "45.5", "-1", "101", "nan", "inf", "error"]
 # Mantén tots els fitxers dins de la carpeta temporal.
 # TODO: importa Path i TemporaryDirectory i prova els dos camins.
 
+with TemporaryDirectory() as carpeta:
+    ruta = Path(carpeta) / "absent.txt"
+    try:
+        with open(ruta, encoding="UTF-8") as f:
+            contingut = f.read()
+    except FileNotFoundError:
+        print("Fitxer Absent")
+    else:
+        print(contingut)
+    finally:
+        print("Intent acabat")
+
+    ruta = Path("text.txt")
+    try:
+        with open(ruta, encoding="UTF-8") as f:
+            contingut = f.read()
+    except FileNotFoundError:
+        print("Fitxer Absent")
+    else:
+        print(contingut)
+    finally:
+        print("Intent acabat")
+
+
 # Exercici 4 - Repte opcional. Filtrar lectures de temperatura
 # Defineix filtrar_temperatures(textos) que retorni (valides, rebutjades).
 # valides és la llista de floats finits dins del rang simulat [-40, 85] °C.
@@ -42,3 +87,26 @@ entrades_humitat = ["0", "100", "45.5", "-1", "101", "nan", "inf", "error"]
 # Amb [] ha de retornar ([], 0). Amb ['nan', 'inf'] ha de retornar ([], 2).
 textos = ["-40", "21.5", "85", "86", "avaria", "nan"]
 # TODO: captura ValueError per cada lectura i continua amb les següents.
+
+def filtrar_temperatures(textos):
+    rebutjades = 0
+    valides = []
+    for text in textos:
+        try:
+            text = validar_temperatura(text)
+        except ValueError:
+            rebutjades+=1
+        else:
+            valides.append(text)
+       
+    return valides, rebutjades
+
+def validar_temperatura(text):
+    temperatura = float(text)
+    if(temperatura>85 or temperatura < -40):
+        raise ValueError("Temperatura fora del rang")
+    if not math.isfinite(temperatura):
+        raise ValueError("La temperatura no es finita")
+    return temperatura
+
+print(filtrar_temperatures(textos))
